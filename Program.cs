@@ -23,6 +23,8 @@
 // интерпункт ( · ) 
 
 using System;
+using System.IO;
+using System.Text;
 
 namespace vrt_txt
 {
@@ -36,11 +38,39 @@ namespace vrt_txt
             // TODO tags
             // TODO lemmas
 
-            // прочитать строку из файла
+            string input_file = args[0];
+            StringBuilder line = new StringBuilder();
+
+            try
+            {
+                if (File.Exists(input_file))
+                {
+                    // прочитать строку из файла
+                    using (FileStream inputFileStream = new FileStream(input_file, FileMode.OpenOrCreate))
+                    {
+                        using (StreamReader sr = new StreamReader(inputFileStream))
+                        {
+                            while (sr.Peek() >= 0)
+                            {
+                                line.Clear();
+                                line.Append(sr.ReadLine());
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The process failed: {0}", e.ToString());
+            }
+
+            
             // разбить её на части
             // сохранить части в List
             // записать List в новый файл построчно
-            
+
             Console.WriteLine("Hello World!");
         }
     }
