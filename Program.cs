@@ -53,17 +53,39 @@ namespace vrt_txt
                             // знаки препинания сохраняются и переносятся на новую строку
                             else if ((c == '.') || (c == ',') || (c == ';') || (c == ':')) {
                                 lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
                             }
-                            // скобочки сохраняются и переносятся на новую строку
-                            else if ((c == '[') || (c == ']') || (c == '(') || (c == ')') || (c == '{') || (c == '}') || (c == '⟨') || (c == '⟩')) {
+                            // открывающиеся скобочки сохраняются и переносятся на новую строку
+                            else if ((c == '[') || (c == '(') || (c == '{') || (c == '⟨')) {
                                 lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");                                
+                            }
+                            // закрывающиеся скобочки сохраняются и переносятся на новую строку
+                            else if ((c == ']') || (c == ')') || (c == '}') || (c == '⟩')) {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");                           
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
                             }
                             // редкие знаки препинания сохраняются и переносятся на новую строку
-                            else if ((c == '!') || (c == '?') || (c == '…') || (c == '"') || (c == '«') || (c == '»')) {
+                            else if ((c == '!') || (c == '?') || (c == '…') || (c == '»')) {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");                           
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                            }
+                            else if (c == '«') {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");                                                           
+                            }
+                            // " сохраняется и переносится на новую строку без тега
+                            else if (c == '"') {
                                 lines_for_output_file.Append('\n');
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
