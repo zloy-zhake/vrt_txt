@@ -30,48 +30,59 @@ namespace vrt_txt
 {
     class Program
     {
-        static void Main(string[] args)
-        {
+        static void Main(string[] args) {
             // word/punk per line
             // <g/>
             // <align>
             // TODO tags
             // TODO lemmas
 
-            string input_file = args[0];
-            StringBuilder line = new StringBuilder();
+            // string input_file = args[0];
+            string input_file = "akorda.eng";
+            // TODO переименовать файл во что-нибудь с vrt
+            string output_file = input_file + "out";
+            String line_from_input_file;
+            StringBuilder lines_for_output_file = new StringBuilder();
 
-            try
-            {
-                if (File.Exists(input_file))
-                {
+            FileStream inputFileStream = new FileStream(input_file, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(inputFileStream);
+            FileStream outputFileStream = new FileStream(output_file, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(outputFileStream);
+
+
+            try {
+                if (File.Exists(input_file)) {
+
                     // прочитать строку из файла
-                    using (FileStream inputFileStream = new FileStream(input_file, FileMode.OpenOrCreate))
-                    {
-                        using (StreamReader sr = new StreamReader(inputFileStream))
-                        {
-                            while (sr.Peek() >= 0)
-                            {
-                                line.Clear();
-                                line.Append(sr.ReadLine());
+                    while (sr.Peek() >= 0) {
+                        line_from_input_file = sr.ReadLine();
+
+                        // разбить её на части
+                        // сохранить части в StringBuilder
+
+                        lines_for_output_file.Clear();
+                        foreach (char c in line_from_input_file) {
+                            // если пробел - вставляем новую строку
+                            if ((c == ' ') || (c == ' ') || (c == ' ')) {
+                                lines_for_output_file.Append('\n');
+                            }
+                            // если не всё, что выше, копируем как есть
+                            else {
+                                lines_for_output_file.Append(c);
                             }
                         }
+                        lines_for_output_file.Append('\n');
+
+                        // записать StringBuilder в файл
+
+                        sw.Write(lines_for_output_file.ToString());
+                        sw.Flush();
                     }
                 }
-
-
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine("The process failed: {0}", e.ToString());
             }
-
-            
-            // разбить её на части
-            // сохранить части в List
-            // записать List в новый файл построчно
-
-            Console.WriteLine("Hello World!");
         }
     }
 }
