@@ -2,25 +2,8 @@
 // https://www.sketchengine.co.uk/documentation/preparing-corpus-text/
 // assuming that input text is well-formatted
 // TODO if 2 files are provided as input they are assumed to be parallel
-
-// Знаки препинания 
-// апостроф ( ’ ' ) 
-// скобки ( [ ], ( ), { }, ⟨ ⟩ ) 
-// двоеточие ( : ) 
-// запятая ( , ) 
-// тире ( ‒, –, —, ― ) 
-// многоточие ( …, ..) 
-// восклицательный знак ( ! ) 
-// точка ( . ) 
-// дефис ( -, ‐ ) 
-// вопросительный знак ( ? ) 
-// кавычки ( ‘ ’, “ ”, « » ) 
-// точка с запятой ( ; ) 
-// косая черта ( / ) 
-
-// Словоразделители 
-// пробел ( ) ( ) ( ) (␠) (␢) (␣) 
-// интерпункт ( · ) 
+// future TODO tags
+// future TODO lemmas
 
 using System;
 using System.IO;
@@ -31,24 +14,21 @@ namespace vrt_txt
     class Program
     {
         static void Main(string[] args) {
-            // word/punk per line
             // <g/>
             // <align>
-            // TODO tags
-            // TODO lemmas
-
+            
             // string input_file = args[0];
             string input_file = "akorda.eng";
             // TODO переименовать файл во что-нибудь с vrt
             string output_file = input_file + "out";
-            String line_from_input_file;
+            string line_from_input_file;
             StringBuilder lines_for_output_file = new StringBuilder();
+            string l_f_o_f;
 
             FileStream inputFileStream = new FileStream(input_file, FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(inputFileStream);
             FileStream outputFileStream = new FileStream(output_file, FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter sw = new StreamWriter(outputFileStream);
-
 
             try {
                 if (File.Exists(input_file)) {
@@ -62,20 +42,48 @@ namespace vrt_txt
 
                         lines_for_output_file.Clear();
                         foreach (char c in line_from_input_file) {
+                            // если буква/цифра - оставляем как есть
+                            if (Char.IsLetterOrDigit(c)) {
+                                lines_for_output_file.Append(c);
+                            }
                             // если пробел - вставляем новую строку
-                            if ((c == ' ') || (c == ' ') || (c == ' ')) {
+                            else if (Char.IsWhiteSpace(c)) {
                                 lines_for_output_file.Append('\n');
                             }
-                            // если не всё, что выше, копируем как есть
+                            // знаки препинания сохраняются и переносятся на новую строку
+                            else if ((c == '.') || (c == ',') || (c == ';') || (c == ':')) {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                            }
+                            // скобочки сохраняются и переносятся на новую строку
+                            else if ((c == '[') || (c == ']') || (c == '(') || (c == ')') || (c == '{') || (c == '}') || (c == '⟨') || (c == '⟩')) {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                            }
+                            // редкие знаки препинания сохраняются и переносятся на новую строку
+                            else if ((c == '!') || (c == '?') || (c == '…') || (c == '"') || (c == '«') || (c == '»')) {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                            }
+                            // если не всё, что выше, оставляем как есть
                             else {
                                 lines_for_output_file.Append(c);
                             }
                         }
                         lines_for_output_file.Append('\n');
 
-                        // записать StringBuilder в файл
+                        // убрать пустые строки
+                        l_f_o_f = lines_for_output_file.ToString();
+                        while (l_f_o_f.Contains("\n\n")) {
+                            l_f_o_f = l_f_o_f.Replace("\n\n", "\n");
+                        }
 
-                        sw.Write(lines_for_output_file.ToString());
+                        // записать результат в файл
+
+                        sw.Write(l_f_o_f);
                         sw.Flush();
                     }
                 }
@@ -86,3 +94,23 @@ namespace vrt_txt
         }
     }
 }
+
+
+// Знаки препинания 
+// апостроф ( ’ ' ) 
+// точка ( . ) 20112
+// запятая ( , ) 15571
+// точка с запятой ( ; ) 805
+// тире ( ‒, –, —, ― ) 678 
+// дефис ( -, ‐ ) 
+// скобки ( [ ], ( ), { }, ⟨ ⟩ ) 468
+// двоеточие ( : ) 451
+// восклицательный знак ( ! ) 133
+// косая черта ( / ) 17
+// вопросительный знак ( ? ) 14
+// многоточие ( …, ..) 2
+// кавычки ( ‘ ’, “ ”, « » ) 
+
+// Словоразделители 
+// пробел ( ) ( ) ( ) (␠) (␢) (␣) 432542
+// интерпункт ( · ) 
