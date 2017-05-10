@@ -19,10 +19,10 @@ namespace vrt_txt
             // string input_file = args[0];
             string input_file = "akorda.eng";
             string output_file = input_file + "-vrt-out";
-            NewMethod(input_file, output_file);
+            ConverToVert(input_file, output_file, true);
         }
 
-        private static void NewMethod(string input_file, string output_file) {
+        private static void ConverToVert(string input_file, string output_file, bool add_align_tags) {
             string line_from_input_file;
             StringBuilder lines_for_output_file = new StringBuilder();
             string l_f_o_f;
@@ -43,6 +43,12 @@ namespace vrt_txt
                         // сохранить части в StringBuilder
 
                         lines_for_output_file.Clear();
+
+                        // Добавляем тег <align>, если требуется
+                        if (add_align_tags){
+                            lines_for_output_file.Append("<align>\n");
+                        }
+
                         foreach (char c in line_from_input_file) {
                             // если буква/цифра - оставляем как есть
                             if (Char.IsLetterOrDigit(c)) {
@@ -98,6 +104,11 @@ namespace vrt_txt
                         }
                         lines_for_output_file.Append('\n');
 
+                        // Добавляем тег </align>, если требуется
+                        if (add_align_tags){
+                            lines_for_output_file.Append("</align>\n");
+                        }
+                        
                         // убрать пустые строки
                         l_f_o_f = lines_for_output_file.ToString();
                         while (l_f_o_f.Contains("\n\n")) {
