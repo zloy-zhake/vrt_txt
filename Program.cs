@@ -1,7 +1,9 @@
-﻿// convert text into “vertical” or “word-per-line (WPL)” format as described at
+﻿// Converts text into “vertical” or “word-per-line (WPL)” format as described at
 // https://www.sketchengine.co.uk/documentation/preparing-corpus-text/
-// assuming that input text is well-formatted
-// TODO if 2 files are provided as input they are assumed to be parallel
+// Assumes that input text is well-formatted
+// If 1 file is provide it gets converted.
+// If 2 files are provided as input they are assumed to be parallel.
+
 // future TODO tags
 // future TODO lemmas
 
@@ -14,15 +16,40 @@ namespace vrt_txt
     class Program
     {
         static void Main(string[] args) {
-            // <align>
 
-            // string input_file = args[0];
-            string input_file = "akorda.eng";
-            string output_file = input_file + "-vrt-out";
-            ConverToVert(input_file, output_file, true);
+            const bool ADD_ALIGN_TAGS = true;
+            const bool NO_ALIGN_TAGS = false;
+            string input_file = "";
+            string output_file = "";
+
+            switch (args.Length) {
+                case 0:
+                    Console.Write("Укажите корпусы, которые надо конвертировать.");
+                    break;
+                case 1:
+                    input_file = args[0];
+                    output_file = input_file + "-vrt-out";
+                    ConvertToVert(input_file, output_file, NO_ALIGN_TAGS);
+                    break;
+                case 2:
+                    input_file = args[0];
+                    output_file = input_file + "-vrt-out";
+                    ConvertToVert(input_file, output_file, ADD_ALIGN_TAGS);
+                    input_file = args[1];
+                    output_file = input_file + "-vrt-out";
+                    ConvertToVert(input_file, output_file, ADD_ALIGN_TAGS);
+                    break;
+                default:
+                    Console.Write("Вы указали слишком много параметров.");
+                    break;
+            }
         }
 
-        private static void ConverToVert(string input_file, string output_file, bool add_align_tags) {
+        // Method that perform conversion
+        // string input_file - existing file that contains text to be coverted
+        // string output_file - new file that will contain coverted text
+        // bool add_align_tags - tells whether to add <align> tags (needed for parallel texts)
+        private static void ConvertToVert(string input_file, string output_file, bool add_align_tags) {
             string line_from_input_file;
             StringBuilder lines_for_output_file = new StringBuilder();
             string l_f_o_f;
@@ -45,7 +72,7 @@ namespace vrt_txt
                         lines_for_output_file.Clear();
 
                         // Добавляем тег <align>, если требуется
-                        if (add_align_tags){
+                        if (add_align_tags) {
                             lines_for_output_file.Append("<align>\n");
                         }
 
@@ -105,10 +132,10 @@ namespace vrt_txt
                         lines_for_output_file.Append('\n');
 
                         // Добавляем тег </align>, если требуется
-                        if (add_align_tags){
+                        if (add_align_tags) {
                             lines_for_output_file.Append("</align>\n");
                         }
-                        
+
                         // убрать пустые строки
                         l_f_o_f = lines_for_output_file.ToString();
                         while (l_f_o_f.Contains("\n\n")) {
