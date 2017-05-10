@@ -3,10 +3,12 @@ Converts text into “vertical” or “word-per-line (WPL)” format as describ
 
 Assumes that input text is well-formatted.
 
-If 1 file is provide it gets converted.
+If 1 file is provided it gets converted.
 
 If 2 files are provided as input they are assumed to be parallel.
 
 // Translate "interface" and comments into English
+
 // TODO tags
+
 // TODO lemmas
