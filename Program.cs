@@ -14,13 +14,15 @@ namespace vrt_txt
     class Program
     {
         static void Main(string[] args) {
-            // <g/>
             // <align>
-            
+
             // string input_file = args[0];
             string input_file = "akorda.eng";
-            // TODO переименовать файл во что-нибудь с vrt
-            string output_file = input_file + "out";
+            string output_file = input_file + "-vrt-out";
+            NewMethod(input_file, output_file);
+        }
+
+        private static void NewMethod(string input_file, string output_file) {
             string line_from_input_file;
             StringBuilder lines_for_output_file = new StringBuilder();
             string l_f_o_f;
@@ -62,36 +64,35 @@ namespace vrt_txt
                                 lines_for_output_file.Append('\n');
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
-                                lines_for_output_file.Append("<g/>\n");                                
+                                lines_for_output_file.Append("<g/>\n");
                             }
                             // закрывающиеся скобочки сохраняются и переносятся на новую строку
                             else if ((c == ']') || (c == ')') || (c == '}') || (c == '⟩')) {
                                 lines_for_output_file.Append('\n');
-                                lines_for_output_file.Append("<g/>\n");                           
+                                lines_for_output_file.Append("<g/>\n");
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
                             }
                             // редкие знаки препинания сохраняются и переносятся на новую строку
                             else if ((c == '!') || (c == '?') || (c == '…') || (c == '»')) {
                                 lines_for_output_file.Append('\n');
-                                lines_for_output_file.Append("<g/>\n");                           
+                                lines_for_output_file.Append("<g/>\n");
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
-                            }
-                            else if (c == '«') {
-                                lines_for_output_file.Append('\n');
-                                lines_for_output_file.Append(c);
-                                lines_for_output_file.Append('\n');
-                                lines_for_output_file.Append("<g/>\n");                                                           
-                            }
-                            // " сохраняется и переносится на новую строку без тега
-                            else if (c == '"') {
+                            } else if (c == '«') {
                                 lines_for_output_file.Append('\n');
                                 lines_for_output_file.Append(c);
                                 lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append("<g/>\n");
                             }
-                            // если не всё, что выше, оставляем как есть
-                            else {
+                              // " сохраняется и переносится на новую строку без тега
+                              else if (c == '"') {
+                                lines_for_output_file.Append('\n');
+                                lines_for_output_file.Append(c);
+                                lines_for_output_file.Append('\n');
+                            }
+                              // если не всё, что выше, оставляем как есть
+                              else {
                                 lines_for_output_file.Append(c);
                             }
                         }
