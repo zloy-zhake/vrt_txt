@@ -5,10 +5,10 @@ Assumes that input text is well-formatted.
 
 If 1 file is provided it gets converted.
 
-If 2 files are provided as input they are assumed to be parallel.
+If 2 files are provided they are assumed to be parallel.
 
-// Translate "interface" and comments into English
-
-// TODO tags
-
-// TODO lemmas
+TODO:
+- test scripting with REPL
+- Translate "interface" and comments into English
+- tags
+- lemmas
